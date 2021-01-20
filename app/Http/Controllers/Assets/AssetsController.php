@@ -200,8 +200,12 @@ class AssetsController extends Controller
 
         if ($success) {
             // Redirect to the asset listing page
-            return redirect()->route('hardware.index')
-                ->with('success', trans('admin/hardware/message.create.success'));
+            $id = $asset->id;
+            return view('hardware/redirect',compact('id'));
+
+//            return redirect()->route('hardware.index')
+//                ->wApp\Http\Controllers\AssetModelsContro
+//ller@indexith('success', trans('admin/hardware/message.create.success'));
         }
 
         return redirect()->back()->withInput()->withErrors($asset->getErrors());

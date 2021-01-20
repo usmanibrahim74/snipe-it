@@ -50,6 +50,12 @@ class CategoryPresenter extends Presenter
                 "title" => trans('general.qty'),
                 "visible" => true
             ],[
+                "field" => "available_assets_count",
+                "searchable" => false,
+                "sortable" => true,
+                "title" => "Available ".trans('general.qty'),
+                "visible" => true
+            ],[
                 "field" => "has_eula",
                 "searchable" => false,
                 "sortable" => false,

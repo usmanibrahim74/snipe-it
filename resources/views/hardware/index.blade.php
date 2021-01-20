@@ -108,6 +108,17 @@
             </div><!-- /.col -->
           </div><!-- /.row -->
         {{ Form::close() }}
+
+          <script>
+              var myForm = document.getElementById('bulkForm');
+              myForm.onsubmit = function(e) {
+                  var select = document.querySelector('select[name=bulk_actions]').value;
+                  if(select == "labels"){
+                      var w = window.open('about:blank','Popup_Window','toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=0,width=400,height=300,left = 312,top = 234');
+                      this.target = 'Popup_Window';
+                  }
+              };
+          </script>
       </div><!-- ./box-body -->
     </div><!-- /.box -->
   </div>

@@ -36,7 +36,18 @@ class CompaniesController extends Controller
             'components_count',
         ];
 
-        $companies = Company::withCount('assets as assets_count','licenses as licenses_count','accessories as accessories_count','consumables as consumables_count','components as components_count','users as users_count');
+        $companies = Company::withCount(
+            [
+                'assets as assets_count',
+                'assets as available_assets_count' => function($q){
+                    return $q->where('status_id',2)->whereNull('assigned_to');
+                },
+                'licenses as licenses_count',
+                'accessories as accessories_count',
+                'consumables as consumables_count',
+                'components as components_count',
+                'users as users_count'
+            ]);
 
         if ($request->filled('search')) {
             $companies->TextSearch($request->input('search'));

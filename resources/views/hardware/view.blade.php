@@ -723,6 +723,17 @@
                                         </div>
                                     </div>
 
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <strong>
+                                                Ticket ID
+                                            </strong>
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ ($asset->ticket_id) ? (int) $asset->ticket_id : 'NULL' }}
+                                        </div>
+                                    </div>
+
                                 </div> <!-- end row-striped -->
 
                             </div><!-- /col-md-8 -->

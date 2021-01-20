@@ -36,6 +36,7 @@ class AssetModelsTransformer
                 'name'=> e($assetmodel->depreciation->name)
             ]  : null,
             'assets_count' => (int) $assetmodel->assets_count,
+            'available_assets_count' => (int) $assetmodel->available_assets_count,
             'category' => ($assetmodel->category) ? [
                 'id' => (int) $assetmodel->category->id,
                 'name'=> e($assetmodel->category->name)

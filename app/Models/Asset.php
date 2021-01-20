@@ -36,15 +36,15 @@ class Asset extends Depreciable
 
     /**
      * Run after the checkout acceptance was declined by the user
-     * 
+     *
      * @param  User   $acceptedBy
      * @param  string $signature
-     */ 
+     */
     public function declinedCheckout(User $declinedBy, $signature) {
       $this->assigned_to = null;
       $this->assigned_type = null;
-      $this->accepted = null;      
-      $this->save();        
+      $this->accepted = null;
+      $this->save();
     }
 
 
@@ -132,33 +132,34 @@ class Asset extends Depreciable
         'requestable',
         'last_checkout',
         'expected_checkin',
+        'ticket_id',
     ];
 
     use Searchable;
 
     /**
      * The attributes that should be included when searching the model.
-     * 
+     *
      * @var array
      */
     protected $searchableAttributes = [
-      'name', 
-      'asset_tag', 
-      'serial', 
-      'order_number', 
-      'purchase_cost', 
-      'notes', 
+      'name',
+      'asset_tag',
+      'serial',
+      'order_number',
+      'purchase_cost',
+      'notes',
       'created_at',
-      'updated_at',      
-      'purchase_date', 
-      'expected_checkin', 
-      'next_audit_date', 
+      'updated_at',
+      'purchase_date',
+      'expected_checkin',
+      'next_audit_date',
       'last_audit_date'
     ];
 
     /**
      * The relations and their attributes that should be included when searching the model.
-     * 
+     *
      * @var array
      */
     protected $searchableRelations = [
@@ -274,7 +275,7 @@ class Asset extends Depreciable
      * @since [v3.0]
      * @return boolean
      */
-    public function checkOut($target, $admin = null, $checkout_at = null, $expected_checkin = null, $note = null, $name = null, $location = null)
+    public function checkOut($target, $admin = null, $checkout_at = null, $expected_checkin = null, $note = null, $name = null, $location = null, $ticket = null)
     {
         if (!$target) {
             return false;
@@ -288,6 +289,7 @@ class Asset extends Depreciable
         }
 
         $this->last_checkout = $checkout_at;
+        $this->ticket_id = $ticket;
 
         $this->assignedTo()->associate($target);
 
@@ -306,6 +308,7 @@ class Asset extends Depreciable
                 $this->location_id = $target->id;
             }
         }
+
 
         if ($this->save()) {
 
@@ -836,7 +839,7 @@ class Asset extends Depreciable
     public function getEula()
     {
         $Parsedown = new \Parsedown();
-        
+
         if (($this->model) && ($this->model->category)) {
             if ($this->model->category->eula_text) {
                 return $Parsedown->text(e($this->model->category->eula_text));
@@ -1425,7 +1428,7 @@ class Asset extends Depreciable
              * assets.location would fail, as that field doesn't exist -- plus we're already searching
              * against those relationships earlier in this method.
              *
-             * - snipe 
+             * - snipe
              *
              */
             if (($fieldname!='category') && ($fieldname!='model_number') && ($fieldname!='rtd_location') && ($fieldname!='location') && ($fieldname!='supplier')

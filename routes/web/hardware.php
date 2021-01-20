@@ -8,6 +8,12 @@
 |
 */
 Route::group(
+    ['prefix' => 'hardware'],
+    function(){
+        Route::get('{assetId}/barcode', [ 'as' => 'barcode/hardware', 'uses' => 'Assets\BulkAssetsController@getBarCode' ]);
+    }
+);
+Route::group(
     ['prefix' => 'hardware',
     'middleware' => ['auth']],
     function () {
@@ -130,7 +136,7 @@ Route::group(
             'uses' => 'Assets\AssetsController@show'
         ]);
         Route::get('{assetId}/qr_code', [ 'as' => 'qr_code/hardware', 'uses' => 'Assets\AssetsController@getQrCode' ]);
-        Route::get('{assetId}/barcode', [ 'as' => 'barcode/hardware', 'uses' => 'Assets\AssetsController@getBarCode' ]);
+
         Route::get('{assetId}/restore', [
             'as' => 'restore/hardware',
             'uses' => 'Assets\AssetsController@getRestore'

@@ -49,7 +49,10 @@ class AssetModelsController extends Controller
             'models.updated_at',
          ])
             ->with('category','depreciation', 'manufacturer','fieldset')
-            ->withCount('assets as assets_count');
+            ->withCount('assets as assets_count')
+            ->withCount(['assets as available_assets_count'=>function($q){
+                return $q->where('status_id',2)->whereNull('assigned_to');
+            }]);
 
 
 

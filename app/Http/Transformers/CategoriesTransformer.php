@@ -34,6 +34,7 @@ class CategoriesTransformer
                 'require_acceptance' => ($category->require_acceptance == '1'),
                 'item_count' => (int) $category->itemCount(),
                 'assets_count' => (int) $category->assets_count,
+                'available_assets_count' => (int) $category->available_assets_count,
                 'accessories_count' => (int) $category->accessories_count,
                 'consumables_count' => (int) $category->consumables_count,
                 'components_count' => (int) $category->components_count,

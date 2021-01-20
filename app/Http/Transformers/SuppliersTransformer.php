@@ -39,6 +39,7 @@ class SuppliersTransformer
                 'email' => e($supplier->email),
                 'contact' => e($supplier->contact),
                 'assets_count' => (int) $supplier->assets_count,
+                'available_assets_count' => (int) $supplier->available_assets_count,
                 'accessories_count' => (int) $supplier->accessories_count,
                 'licenses_count' => (int) $supplier->licenses_count,
                 'notes' => ($supplier->notes) ? e($supplier->notes) : null,

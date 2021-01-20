@@ -155,7 +155,14 @@
                         text_help = '';
                 }
 
-                return '<nobr><a href="{{ url('/') }}/' + destination + '/' + value.id + '" data-toggle="tooltip" title="'+ status_meta[value.status_meta] + '"> <i class="fa ' + icon_style + ' text-' + text_color + '"></i> ' + value.name + ' ' + text_help + ' </a> </nobr>';
+                if(value.status_meta == "deployed"){
+                    return '<nobr><a href="{{ url('/') }}/' + destination + '/' + value.id + '" data-toggle="tooltip" title="'+ status_meta[value.status_meta] + '"> <i class="fa ' + icon_style + ' text-' + text_color + '"></i> ' + value.status_meta.charAt(0).toUpperCase() + value.status_meta.slice(1) + '  </a> </nobr>';
+                }else{
+                    return '<nobr><a href="{{ url('/') }}/' + destination + '/' + value.id + '" data-toggle="tooltip" title="'+ status_meta[value.status_meta] + '"> <i class="fa ' + icon_style + ' text-' + text_color + '"></i> ' + value.name + ' ' + text_help + ' </a> </nobr>';
+
+                }
+
+
             } else if ((value) && (value.name)) {
 
                 // Add some overrides for any funny urls we have
@@ -628,5 +635,5 @@
     });
 
 </script>
-    
+
 @endpush

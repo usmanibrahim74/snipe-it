@@ -10,10 +10,14 @@ use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
+use Illuminate\Support\Arr;
 
 class BulkAssetsController extends Controller
 {
     use CheckInOutRequest;
+
+
 
     /**
      * Display the bulk edit page.
@@ -29,15 +33,23 @@ class BulkAssetsController extends Controller
         $this->authorize('update', Asset::class);
 
         if (!$request->filled('ids')) {
+
             return redirect()->back()->with('error', 'No assets selected');
         }
 
-        $asset_ids = array_keys($request->input('ids'));
+
+        if(Arr::isAssoc($request->input('ids'))){
+            $asset_ids = array_keys($request->input('ids'));
+        }else{
+            $asset_ids = $request->input('ids');
+
+        }
+
 
         if ($request->filled('bulk_actions')) {
             switch($request->input('bulk_actions')) {
                 case 'labels':
-                    return view('hardware/labels')
+                    return view('hardware/pdf')
                         ->with('assets', Asset::find($asset_ids))
                         ->with('settings', Setting::getSettings())
                         ->with('bulkedit', true)
@@ -55,6 +67,39 @@ class BulkAssetsController extends Controller
             }
         }
         return redirect()->back()->with('error', 'No action selected');
+    }
+
+    public function getBarCode($assetId = null)
+    {
+        $settings = Setting::getSettings();
+        $asset = Asset::find($assetId);
+        $public_file = 'uploads/barcodes/'.str_slug($settings->alt_barcode).'-'.str_slug($asset->asset_tag).'.png';
+        $barcode_file = public_path().'/'.$public_file;
+
+        if (isset($asset->id, $asset->asset_tag)) {
+            if (file_exists($barcode_file)) {
+//                $header = ['Content-type' => 'image/png'];
+                return $public_file;
+            } else {
+                // Calculate barcode width in pixel based on label width (inch)
+                $barcode_width = ($settings->labels_width - $settings->labels_display_sgutter) * 96.000000000001;
+
+                $barcode = new \Com\Tecnick\Barcode\Barcode();
+                $barcode_obj = $barcode->getBarcodeObj(
+                    $settings->alt_barcode,
+                    $asset->asset_tag,
+                    ($barcode_width < 300 ? $barcode_width : 300),
+                    20
+                )->setBackgroundColor('white');
+//                $im = new Imagick();
+//                dd($im);
+//                return $barcode_obj->getSvgCode();
+//                exit;
+//                dd('jere');
+                file_put_contents($barcode_file, $barcode_obj->getPngData());
+                return $public_file;
+            }
+        }
     }
 
     /**

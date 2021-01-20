@@ -75,9 +75,12 @@ class AssetCheckoutController extends Controller
                 $expected_checkin = $request->get('expected_checkin');
             }
 
-            if ($asset->checkOut($target, $admin, $checkout_at, $expected_checkin, e($request->get('note')), $request->get('name'))) {
+            $ticket = $request->ticket;
+
+            if ($asset->checkOut($target, $admin, $checkout_at, $expected_checkin, e($request->get('note')), $request->get('name'), null, $ticket)) {
                 return redirect()->route("hardware.index")->with('success', trans('admin/hardware/message.checkout.success'));
             }
+
 
             // Redirect to the asset management page with error
             return redirect()->to("hardware/$assetId/checkout")->with('error', trans('admin/hardware/message.checkout.error').$asset->getErrors());

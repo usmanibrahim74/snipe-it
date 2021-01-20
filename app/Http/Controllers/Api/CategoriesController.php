@@ -25,7 +25,10 @@ class CategoriesController extends Controller
         $allowed_columns = ['id', 'name','category_type', 'category_type','use_default_eula','eula_text', 'require_acceptance','checkin_email', 'assets_count', 'accessories_count', 'consumables_count', 'components_count','licenses_count', 'image'];
 
         $categories = Category::select(['id', 'created_at', 'updated_at', 'name','category_type','use_default_eula','eula_text', 'require_acceptance','checkin_email','image'])
-            ->withCount('assets as assets_count', 'accessories as accessories_count', 'consumables as consumables_count', 'components as components_count','licenses as licenses_count');
+            ->withCount('assets as assets_count', 'accessories as accessories_count', 'consumables as consumables_count', 'components as components_count','licenses as licenses_count')
+            ->withCount(['assets as available_assets_count'=>function($q){
+                return $q->where('status_id',2)->whereNull('assigned_to');
+            }]);
 
         if ($request->filled('search')) {
             $categories = $categories->TextSearch($request->input('search'));
